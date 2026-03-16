@@ -4,7 +4,7 @@ import SwiftUI
 @MainActor
 class AnalyticsViewModel {
     var selectedPanel: PanelType = .yourInsights
-    var selectedFilter: FilterType = .overall
+    var selectedFilter: FilterType = .revisits
     var selectedDetailTab: DetailTab = .engagement
     var isRefreshingAI: Bool = false
     var copiedMessageId: String?

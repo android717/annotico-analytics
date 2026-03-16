@@ -38,10 +38,7 @@ nonisolated struct Investor: Identifiable, Hashable {
     var tags: [InvestorTag] {
         var result: [InvestorTag] = []
         if revisits > 0 { result.append(.revisit(revisits)) }
-        if hasPayment { result.append(.payment) }
         if hasCollab { result.append(.collab) }
-        if hasVideo { result.append(.video) }
-        if hasImage { result.append(.image) }
         return result
     }
 }
@@ -71,17 +68,11 @@ nonisolated enum InvestorBadge: String, Hashable {
 nonisolated enum InvestorTag: Hashable {
     case revisit(Int)
     case collab
-    case payment
-    case video
-    case image
 
     var label: String {
         switch self {
         case .revisit(let count): return "\(count) Revisit\(count > 1 ? "s" : "")"
         case .collab: return "Co-viewed"
-        case .payment: return "Payment Plan"
-        case .video: return "Video"
-        case .image: return "Images"
         }
     }
 
@@ -89,9 +80,6 @@ nonisolated enum InvestorTag: Hashable {
         switch self {
         case .revisit: return Color(red: 0.23, green: 0.31, blue: 0.66)
         case .collab: return Color(red: 0.09, green: 0.40, blue: 0.20)
-        case .payment: return Color(red: 0.57, green: 0.25, blue: 0.05)
-        case .video: return Color(red: 0.53, green: 0.10, blue: 0.56)
-        case .image: return Color(red: 0.03, green: 0.35, blue: 0.52)
         }
     }
 
@@ -99,69 +87,46 @@ nonisolated enum InvestorTag: Hashable {
         switch self {
         case .revisit: return Color(red: 0.93, green: 0.95, blue: 1.0)
         case .collab: return Color(red: 0.94, green: 0.99, blue: 0.96)
-        case .payment: return Color(red: 1.0, green: 0.98, blue: 0.93)
-        case .video: return Color(red: 0.99, green: 0.95, blue: 0.97)
-        case .image: return Color(red: 0.94, green: 0.98, blue: 1.0)
         }
     }
 }
 
 nonisolated enum FilterType: String, CaseIterable, Identifiable {
-    case overall = "Overall Score"
     case revisits = "Revisits"
     case engagement = "Engagement"
     case collab = "Collaborative"
-    case payment = "Payment Plan"
-    case video = "Videos"
-    case image = "Images"
 
     var id: String { rawValue }
 
     var sectionLabel: String {
         switch self {
-        case .overall: return "Overall Top 10 — All Parameters"
         case .revisits: return "Top 10 — By Revisits"
         case .engagement: return "Top 10 — By Engagement Time"
         case .collab: return "Top 10 — Collaborative Sessions"
-        case .payment: return "Top 10 — Viewed Payment Plan"
-        case .video: return "Top 10 — Viewed Videos"
-        case .image: return "Top 10 — Viewed Images"
         }
     }
 
     var statLabel: String {
         switch self {
-        case .overall: return "overall score"
         case .revisits: return "revisits"
         case .engagement: return "total time"
         case .collab: return "co-viewers"
-        case .payment: return "views"
-        case .video: return "video time"
-        case .image: return "image time"
         }
     }
 
     func statValue(for investor: Investor) -> String {
         switch self {
-        case .overall: return "\(investor.overallScore)"
         case .revisits: return "\(investor.revisits)"
         case .engagement: return "\(investor.engagementMin)m"
         case .collab: return investor.coviewers > 0 ? "\(investor.coviewers)" : "—"
-        case .payment: return investor.paymentViews > 0 ? "\(investor.paymentViews)x" : "—"
-        case .video: return investor.videoMin > 0 ? "\(investor.videoMin)m" : "—"
-        case .image: return investor.imageMin > 0 ? "\(investor.imageMin)m" : "—"
         }
     }
 
     func sortedInvestors(_ investors: [Investor]) -> [Investor] {
         switch self {
-        case .overall: return investors.sorted { $0.overallScore > $1.overallScore }
         case .revisits: return investors.sorted { $0.revisits > $1.revisits }
         case .engagement: return investors.sorted { $0.engagementMin > $1.engagementMin }
         case .collab: return investors.sorted { $0.coviewers > $1.coviewers }
-        case .payment: return investors.sorted { $0.paymentViews > $1.paymentViews }
-        case .video: return investors.sorted { $0.videoMin > $1.videoMin }
-        case .image: return investors.sorted { $0.imageMin > $1.imageMin }
         }
     }
 }

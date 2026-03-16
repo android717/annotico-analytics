@@ -5,17 +5,15 @@ struct InvestorRowView: View {
     let rank: Int
     let filter: FilterType
 
-    private var isOverall: Bool { filter == .overall }
-
     var body: some View {
         HStack(spacing: 14) {
             Text("\(rank)")
                 .font(.system(size: 12, weight: .bold, design: .rounded))
-                .foregroundStyle(isOverall ? .white : AppColors.gold)
+                .foregroundStyle(AppColors.gold)
                 .frame(width: 28, height: 28)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(isOverall ? AppColors.scoreColor(for: investor.overallScore) : AppColors.navy)
+                        .fill(AppColors.navy)
                 )
 
             VStack(alignment: .leading, spacing: 3) {
@@ -33,10 +31,6 @@ struct InvestorRowView: View {
                 }
 
                 coviewerLine
-
-                if isOverall {
-                    scoreBar
-                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -45,7 +39,7 @@ struct InvestorRowView: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(filter.statValue(for: investor))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(isOverall ? AppColors.scoreColor(for: investor.overallScore) : AppColors.navy)
+                    .foregroundStyle(AppColors.navy)
                 Text(filter.statLabel)
                     .font(.system(size: 10))
                     .foregroundStyle(AppColors.muted)
@@ -94,28 +88,6 @@ struct InvestorRowView: View {
                     .foregroundStyle(AppColors.muted)
             }
         }
-    }
-
-    private var scoreBar: some View {
-        HStack(spacing: 8) {
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(AppColors.border)
-                        .frame(height: 5)
-                    Capsule()
-                        .fill(AppColors.scoreColor(for: investor.overallScore))
-                        .frame(width: geo.size.width * CGFloat(investor.overallScore) / 100.0, height: 5)
-                }
-            }
-            .frame(height: 5)
-
-            Text("\(investor.overallScore)")
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(AppColors.scoreColor(for: investor.overallScore))
-                .frame(width: 28, alignment: .trailing)
-        }
-        .padding(.top, 4)
     }
 
     private var tagStack: some View {
