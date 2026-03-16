@@ -34,8 +34,6 @@ struct InvestorRowView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            tagStack
-
             VStack(alignment: .trailing, spacing: 2) {
                 Text(filter.statValue(for: investor))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -90,17 +88,5 @@ struct InvestorRowView: View {
         }
     }
 
-    private var tagStack: some View {
-        VStack(spacing: 4) {
-            ForEach(Array(investor.tags.prefix(2)), id: \.self) { tag in
-                Text(tag.label)
-                    .font(.system(size: 10, weight: .semibold))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .foregroundStyle(tag.color)
-                    .background(tag.bgColor)
-                    .clipShape(Capsule())
-            }
-        }
-    }
+
 }
